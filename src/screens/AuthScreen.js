@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import Constants from 'expo-constants';
+import * as AppleAuthentication from 'expo-apple-authentication';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const AuthScreen = ({ navigation }) => {
   const { theme } = useTheme();
@@ -25,6 +31,16 @@ const AuthScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+
+  // Google Auth setup (IDs aus app.json -> expo.extra.google)
+  const googleExtra = Constants.expoConfig?.extra?.google || {};
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId: googleExtra.iosClientId,
+    androidClientId: googleExtra.androidClientId,
+    webClientId: googleExtra.webClientId,
+    expoClientId: googleExtra.expoClientId,
+    scopes: ['profile', 'email'],
+  });
 
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) {
@@ -57,37 +73,78 @@ const AuthScreen = ({ navigation }) => {
   };
 
   const handleGoogleAuth = async () => {
-    setIsLoading(true);
-    
     try {
-      // Simulate Google auth - in a real app, you'd use expo-auth-session
-      const userData = {
-        
-      };
-
-      await login(userData);
+      setIsLoading(true);
+      await promptAsync();
     } catch (error) {
       Alert.alert('Fehler', 'Google-Anmeldung fehlgeschlagen.');
-    } finally {
       setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    const completeLogin = async () => {
+      if (response?.type === 'success' && response.authentication?.accessToken) {
+        try {
+          const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${response.authentication.accessToken}` },
+          });
+          const profile = await res.json();
+
+          const userData = {
+            id: profile.sub,
+            email: profile.email,
+            name: profile.name || profile.given_name || 'Google Nutzer',
+            authMethod: 'google',
+            picture: profile.picture,
+          };
+          await login(userData);
+        } catch (e) {
+          Alert.alert('Fehler', 'Google-Profil konnte nicht geladen werden.');
+        } finally {
+          setIsLoading(false);
+        }
+      } else if (response?.type === 'error' || response?.type === 'dismiss') {
+        setIsLoading(false);
+      }
+    };
+
+    completeLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+
   const handleAppleAuth = async () => {
-    setIsLoading(true);
-    
+    if (Platform.OS !== 'ios') {
+      Alert.alert('Nicht verfügbar', 'Apple-Anmeldung ist nur auf iOS verfügbar.');
+      return;
+    }
     try {
-      // Simulate Apple auth - in a real app, you'd use expo-apple-authentication
+      setIsLoading(true);
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      const nameParts = [];
+      if (credential.fullName?.givenName) nameParts.push(credential.fullName.givenName);
+      if (credential.fullName?.familyName) nameParts.push(credential.fullName.familyName);
+
       const userData = {
-        id: 'apple_' + Math.random().toString(36).substr(2, 9),
-        email: 'user@icloud.com',
-        name: 'Apple Nutzer',
-        authMethod: 'apple'
+        id: credential.user,
+        email: credential.email || 'unknown@appleid.com',
+        name: nameParts.join(' ').trim() || 'Apple Nutzer',
+        authMethod: 'apple',
       };
 
       await login(userData);
     } catch (error) {
-      Alert.alert('Fehler', 'Apple-Anmeldung fehlgeschlagen.');
+      if (error?.code === 'ERR_CANCELED') {
+        // User canceled sign-in, just ignore
+      } else {
+        Alert.alert('Fehler', 'Apple-Anmeldung fehlgeschlagen.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -205,22 +262,24 @@ const AuthScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.socialButton}
               onPress={handleGoogleAuth}
-              disabled={isLoading}
+              disabled={isLoading || !request}
               activeOpacity={0.8}
             >
               <Ionicons name="logo-google" size={20} color={theme.colors.text} />
               <Text style={styles.socialButtonText}>Mit Google fortfahren</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={handleAppleAuth}
-              disabled={isLoading}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="logo-apple" size={20} color={theme.colors.text} />
-              <Text style={styles.socialButtonText}>Mit Apple fortfahren</Text>
-            </TouchableOpacity>
+            {Platform.OS === 'ios' && (
+              <TouchableOpacity
+                style={styles.socialButton}
+                onPress={handleAppleAuth}
+                disabled={isLoading}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="logo-apple" size={20} color={theme.colors.text} />
+                <Text style={styles.socialButtonText}>Mit Apple fortfahren</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <View style={styles.footer}>
