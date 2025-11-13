@@ -47,6 +47,12 @@
       "expo-audio"
     ],
     "extra": {
+      "google": {
+        "androidClientId": "1091265885126-hpmhp9rt62e96lm7l4mj404jkl3dav49.apps.googleusercontent.com",
+        "iosClientId": "YOUR_GOOGLE_IOS_CLIENT_ID",
+        "webClientId": "YOUR_GOOGLE_WEB_CLIENT_ID",
+        "expoClientId": "YOUR_GOOGLE_EXPO_CLIENT_ID"
+      },
       "eas": {
         "projectId": "4e49b025-e9b4-41de-84e3-027f3d65ecda"
       }
