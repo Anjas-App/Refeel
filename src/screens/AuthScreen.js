@@ -226,10 +226,10 @@ const AuthScreen = ({ navigation }) => {
           <View style={styles.footer}>
             <Text style={styles.footerText}>
               Mit der Anmeldung stimmst du unseren{' '}
-              <Text style={styles.linkText}>Nutzungsbedingungen</Text> und der{' '}
-              <TouchableOpacity
-                onPress={() => Linking.openURL('https://github.com/Anjas-App/Refeel/blob/main/Datenschutzerklaerung.html')}
-              >
+              <TouchableOpacity onPress={() => navigation.navigate('Terms')}>
+                <Text style={styles.linkText}>Nutzungsbedingungen</Text>
+              </TouchableOpacity>{' '}und der{' '}
+              <TouchableOpacity onPress={() => navigation.navigate('Privacy')}>
                 <Text style={styles.linkText}>Datenschutzerklärung</Text>
               </TouchableOpacity>
               zu.

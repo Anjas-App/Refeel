@@ -22,6 +22,8 @@ import WorkbookHistoryScreen from '../screens/WorkbookHistoryScreen';
 import MeditationDetailScreen from '../screens/MeditationDetailScreen';
 import MoodHistoryScreen from '../screens/MoodHistoryScreen';
 import { useAuth } from '../contexts/AuthContext';
+import TermsScreen from '../screens/TermsScreen';
+import PrivacyScreen from '../screens/PrivacyScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -327,12 +329,32 @@ const AppNavigator = () => {
             <Stack.Screen name="WorkbookDetail" component={WorkbookDetailScreen} />
             <Stack.Screen name="WorkbookHistory" component={WorkbookHistoryScreen} />
             <Stack.Screen name="History" component={MoodHistoryScreen} />
+            <Stack.Screen 
+              name="Terms" 
+              component={TermsScreen} 
+              options={{ headerShown: true, headerTitle: 'Nutzungsbedingungen' }} 
+            />
+            <Stack.Screen 
+              name="Privacy" 
+              component={PrivacyScreen} 
+              options={{ headerShown: true, headerTitle: 'Datenschutzerklärung' }} 
+            />
           </>
         ) : (
           <>
             <Stack.Screen name="Welcome" component={WelcomeScreen} />
             <Stack.Screen name="MoodTracker" component={MoodTrackerScreen} />
             <Stack.Screen name="Auth" component={AuthScreen} />
+            <Stack.Screen 
+              name="Terms" 
+              component={TermsScreen} 
+              options={{ headerShown: true, headerTitle: 'Nutzungsbedingungen' }} 
+            />
+            <Stack.Screen 
+              name="Privacy" 
+              component={PrivacyScreen} 
+              options={{ headerShown: true, headerTitle: 'Datenschutzerklärung' }} 
+            />
           </>
         )}
       </Stack.Navigator>
