@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "Refeel",
+    "slug": "refeel",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f2fadd"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.refeel.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#f2fadd"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.refeel.app"
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-sqlite",
+      "expo-notifications",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableHermes": false
+          },
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      "expo-audio"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4e49b025-e9b4-41de-84e3-027f3d65ecda"
+      }
+    },
+    "owner": "a.wie",
+    "sdkVersion": "53.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}
