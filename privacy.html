@@ -13,7 +13,7 @@
 <body>
 
 <h1>Datenschutzerklärung für die App „Refeel“</h1>
-<p>Stand: 26.02.2026 – Version 1.0.0</p>
+<p>Stand: 26.02.2026 – Version 1.0.4</p>
 
 <h2>1. Verantwortlicher</h2>
 <p>
@@ -28,11 +28,15 @@ E-Mail: refeel@gmx.de
 <p>Im Rahmen der Nutzung der App werden folgende personenbezogene Daten verarbeitet:</p>
 <ul>
 <li><strong>Nutzer-ID</strong> (zur Kontoverwaltung und Authentifizierung)</li>
-<li><strong>Login-Daten</strong> im Rahmen der Authentifizierung über Supabase (OAuth)</li>
-<li><strong>Abonnement-Status</strong> (über RevenueCat zur Verwaltung von Premium-Funktionen)</li>
+<li><strong>Login-Daten</strong> im Rahmen der Authentifizierung über Supabase (OAuth-Provider wie Google/Apple)</li>
+<li><strong>Abonnement-Status</strong> (über RevenueCat zur Verwaltung von Pro-Funktionen)</li>
+<li>Die von Ihnen eingegebenen Texte im Chat mit der Begleiter:in "Aya" werden verarbeitet, um Antworten zu generieren</li>
 </ul>
 
-<p><strong>Wichtig:</strong> Journaleinträge und persönliche Inhalte werden ausschließlich lokal auf dem Gerät gespeichert und nicht an Server übertragen.</p>
+<div class="highlight-box">
+  <strong>Hinweis zur Speicherung:</strong>
+  Journaleinträge werden ausschließlich lokal auf Ihrem Gerät gespeichert. Chat-Verläufe mit „Aya“ werden ebenfalls lokal auf Ihrem Gerät gespeichert (AsyncStorage), jedoch zur Beantwortung kurzzeitig an den KI-Dienstleister OpenAI übertragen.
+</div>
 
 <h2>3. Zwecke der Verarbeitung</h2>
 <p>Die Datenverarbeitung erfolgt zu folgenden Zwecken:</p>
@@ -44,13 +48,14 @@ E-Mail: refeel@gmx.de
 
 <h2>4. Zahlungsabwicklung</h2>
 <p>Abonnements werden ausschließlich über den Google Play Store abgewickelt. Zahlungsdaten (z. B. Kreditkarteninformationen) werden nicht von der App oder der Verantwortlichen verarbeitet oder gespeichert.</p>
-
+  
 <h2>5. Eingesetzte Dienstleister</h2>
 <p>Zur technischen Bereitstellung der App werden folgende Dienstleister eingesetzt:</p>
 <ul>
-<li><strong>Supabase</strong> (Authentifizierungsdienst)</li>
+<li><strong>Supabase</strong> (Authentifizierung und Datenbank)</li>
 <li><strong>RevenueCat</strong> (Verwaltung des Abonnement-Status)</li>
-<li><strong>Google Play Billing</strong> (Zahlungsabwicklung)</li>
+<li><strong>OpenAI</strong> (KI-Dienstleistung für den Aya Chat)</li>
+<li><strong>Google Play Billing / Apple App Store</strong> (Zahlungsabwicklung)</li>
 </ul>
 <p>Diese Dienstleister handeln als Auftragsverarbeiter im Sinne der DSGVO.</p>
 
